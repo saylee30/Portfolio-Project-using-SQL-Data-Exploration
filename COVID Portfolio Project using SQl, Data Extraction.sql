@@ -131,3 +131,41 @@ Where dae.continent is not null
 
 Select *
 From PercentPopulationVaccinated
+
+
+--Queries used for Tableau Projecet
+--1.
+
+Select SUM(new_cases) as total_cases , SUM(cast(new_deaths as int)) as total_deaths, SUM(cast(new_deaths as int))/ SUM(new_cases)*100 as DeathPercentage
+From PortfolioProject..CovidDeaths
+--Where location like '%states%'
+Where continent is not null
+--Group By date
+order by 1,2
+
+--2
+--European ubion is part of Europe
+
+Select location, SUM(Cast(new_deaths as int)) as TotalDeathsCount
+From PortfolioProject..CovidDeaths
+Where continent is null
+and location not in ( 'world', 'european', 'international')
+Group By location
+order by TotalDeathsCount desc
+
+
+--3
+Select location, population, MAX(total_cases) as HighestInfectCount, MAX((total_cases/population))*100 as PercentPopulationInfected
+From PortfolioProject..CovidDeaths
+--Where location like '%states%'
+--Where continent is not null
+Group By location,population
+order by PercentPopulationInfected desc
+
+--4
+Select location, population, date, MAX(total_cases) as HighestInfectCount, MAX((total_cases/population))*100 as PercentPopulationInfected
+From PortfolioProject..CovidDeaths
+--Where location like '%states%'
+--Where continent is not null
+Group By location,population, date
+order by PercentPopulationInfected desc
